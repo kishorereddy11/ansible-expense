@@ -3,6 +3,11 @@
   hosts: backend
   become: yes
   tasks:
+  - name: python libs
+    ansible.builtin.pip:
+      name: PyMySqL
+      state: present
+      
   - name: disable current module
     ansible.builtin.command: dnf module disable nodejs -y
 
