@@ -2,6 +2,8 @@
 - name: install mysql server
   hosts: mysql
   become: yes
+  vars:
+    mysql_password: ExpenseApp@1
   tasks:
   - name: install mysql libs
     ansible.builtin.pip:
@@ -22,7 +24,7 @@
   - name: connect to mysql server
     community.mysql.mysql_info:
       login_user: root
-      login_password: ExpenseApp@1
+      login_password: {{ mysql_password }}
       login_host: mysql.kommanuthala.store
     register: mysql_info
     ignore_errors: true
@@ -30,3 +32,7 @@
   - name: print the output
     ansible.builtin.debug:
       msg: "{{mysql_info}}"
+
+  - name: set up root password
+    ansible.builtin.command:  " mysql_secure_installation --set-root-pass {{ mysql_password }}"
+    when: mysql_info.failed is true
