@@ -5,9 +5,12 @@
   tasks:
   - name: python libs
     ansible.builtin.pip:
-      name: PyMySqL
-      state: present
-      
+      name: "{{item}}"
+      executable: pip3.9
+    loop:
+      - cryptography
+      - PyMySqL
+
   - name: disable current module
     ansible.builtin.command: dnf module disable nodejs -y
 
